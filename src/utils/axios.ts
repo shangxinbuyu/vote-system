@@ -4,8 +4,8 @@ import router from "@/router";
 
 
 const $http = axios.create({
-    baseURL: 'http://lx496957.ink:80/api',
-    // baseURL: '/api',
+    // baseURL: 'http://lx496957.ink:80/api',
+    baseURL: 'http://localhost:80/api',
     timeout: 5000,
 })
 

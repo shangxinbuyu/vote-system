@@ -99,11 +99,15 @@ const choose = async (item: voteListInterface, flag: boolean) => {
 
 const handleDelete = async (id: number) => {
   try {
-    await ElMessageBox.confirm('确定要删除这个投票吗？', '提示', {
+    const result = await ElMessageBox.confirm('确定要删除这个投票吗？', '提示', {
       confirmButtonText: '确定',
       cancelButtonText: '取消',
       type: 'warning'
-    })
+    }).catch(() => null)
+
+    if (!result) {
+      return
+    }
     await reqDeleteVote(id)
     await list()
   } catch (e) {
@@ -118,6 +122,7 @@ const handleDelete = async (id: number) => {
 
 <style lang="scss" scoped>
 .vote-item {
+  height: 100%;
   padding: 15px;
   background-color: #cacaca;
   border-radius: 10px;

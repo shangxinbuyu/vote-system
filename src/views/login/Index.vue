@@ -88,7 +88,7 @@ const login = async () => {
       title: `Hi,${getTime()}好`,
       message: '欢迎回来'
     })
-    $router.push('/')
+    await $router.push('/')
   } catch (e) {
     ElNotification({
       type: 'error',
