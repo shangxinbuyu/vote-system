@@ -12,7 +12,6 @@ enum API {
     VOTE_CHOOSE_URL = '/vote/choose',
     VOTE_LIKE_LIST_URL = '/vote/like-list',
     ADD_VOTE_URL = '/vote/add',
-    FILTER_VOTE_URL = '/vote/filter',
     DELETE_VOTE_URL = '/vote/delete',
 }
 
@@ -70,19 +69,6 @@ export const reqAddVote = async (data: addVoteInterface) => {
     })
 
     if (result.code === 200) {
-        return 'ok'
-    }
-    return Promise.reject(result.msg)
-}
-// 筛选
-export const reqFilter = async (value: string) => {
-    let result: Response = await $http({
-        method: 'GET',
-        url: API.FILTER_VOTE_URL + `/${value}`,
-    })
-    if (result.code === 200) {
-        voteList.length = 0
-        Object.assign(voteList, result.data)
         return 'ok'
     }
     return Promise.reject(result.msg)

@@ -4,9 +4,9 @@ import router from "@/router";
 
 
 const $http = axios.create({
-    // baseURL: 'http://lx496957.ink:80/api',
-    baseURL: 'http://localhost:80/api',
-    timeout: 5000,
+    baseURL: 'http://lx496957.ink:80/api',
+    // baseURL: 'http://localhost:80/api',
+    timeout: 50000,
 })
 
 $http.interceptors.request.use((config) => {

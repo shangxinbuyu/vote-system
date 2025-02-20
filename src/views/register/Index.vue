@@ -147,7 +147,7 @@ const isRegisterAllowed = computed(() => {
 
 let formData = reactive({
   username: "",
-  email: "3059371185@qq.com",
+  email: "",
   password: "",
   confirmPassword: "",
   code: ""

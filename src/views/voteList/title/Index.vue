@@ -26,10 +26,10 @@
               @change="filter"
           >
 
-            <el-option label="已投票" value="2"/>
-            <el-option label="未投票" value="-2"/>
+            <el-option label="已投票" value="3"/>
+            <el-option label="未投票" value="0"/>
             <el-option label="已赞同" value="1"/>
-            <el-option label="已反对" value="0"/>
+            <el-option label="已反对" value="-1"/>
           </el-select>
         </el-form-item>
       </div>
@@ -47,11 +47,12 @@
 <script lang="ts" name="VoteListTitle" setup>
 import Dialog from './dialog/Index.vue'
 import {reactive} from 'vue'
-import {reqFilter, reqLikeList} from "@/api/vote";
+import {reqLikeList} from "@/api/vote";
 import {ElNotification} from "element-plus";
 import useVoteStore from "@/store/modules/Vote.ts";
 
-let {list} = useVoteStore()
+let {voteList, list} = useVoteStore()
+
 
 const formInline = reactive({
   likeInput: '',
@@ -73,19 +74,36 @@ const likeList = async () => {
 }
 
 const filter = async (value: string) => {
-  if (value === null || value === undefined) {
-    await list()
-    return
+  await list();
+
+  let filteredList = [];
+
+  switch (value) {
+    case '3':
+      console.log('已投票');
+      filteredList = voteList.filter(item => item.status !== 0);
+      console.log(voteList)
+      break;
+    case '0':
+      console.log('未投票');
+      filteredList = voteList.filter(item => item.status === 0)
+      break;
+    case '1':
+      console.log('赞成');
+      filteredList = voteList.filter(item => item.status === 1)
+      break;
+    case '-1':
+      console.log('反对');
+      filteredList = voteList.filter(item => item.status === -1)
+      break;
+    default:
+      console.log('无效选择');
+      return;  // 如果没有有效的 value，直接返回
   }
-  try {
-    await reqFilter(value)
-  } catch (e) {
-    ElNotification({
-      type: 'error',
-      title: '错误',
-      message: e as string,
-    })
-  }
+
+  // 更新 reactive 对象
+  voteList.length = 0;  // 清空原数组
+  voteList.push(...filteredList);  // 将过滤后的结果推入
 }
 </script>
 

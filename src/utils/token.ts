@@ -11,5 +11,22 @@ export function GET_TOKEN() {
 }
 
 export function REMOVE_TOKEN() {
+    Cookies.remove('avatar')
+    Cookies.remove('username')
     return Cookies.remove('token');
+}
+
+export function SET_AVATAR(avatar: string) {
+    Cookies.set('avatar', avatar, {path: '/'})
+}
+
+export function GET_AVATAR() {
+    return Cookies.get('avatar')
+}
+
+export function SET_USERNAME(username: string) {
+    Cookies.set('username',username,{path: '/'})
+}
+export function GET_USERNAME(){
+    return Cookies.get('username')
 }

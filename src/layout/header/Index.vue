@@ -5,7 +5,7 @@
         <el-icon size="20" style="margin-right: 20px">
           <component
               :is="SettingStore.fold ? 'Expand' : 'Fold'"
-              @click="SettingStore.fold =!SettingStore.fold">
+              @click="SettingStore.fold = !SettingStore.fold">
           </component>
         </el-icon>
         <el-breadcrumb separator-icon="ArrowRight">
@@ -17,44 +17,61 @@
     </el-col>
     <el-col :span="12">
       <div class="header_right">
-        <img :src="avatar" alt="" style="width: 24px;height: 24px; margin:0 10px; border-radius: 50% ">
-        <el-dropdown>
+        <img :src="avatar" alt="" style="width: 24px; height: 24px; margin: 0 10px; border-radius: 50%" />
+        <el-dropdown @command="handleCommand">
           <span class="el-dropdown-link">
-            shangxinbuyu
+            {{ username }}
             <el-icon class="el-icon--right">
-              <arrow-down/>
+              <arrow-down />
             </el-icon>
           </span>
           <template #dropdown>
             <el-dropdown-menu>
-              <el-dropdown-item @click="logout">退出登录</el-dropdown-item>
+              <el-dropdown-item command="changeAvatar">更换头像</el-dropdown-item>
+              <el-dropdown-item command="logout">退出登录</el-dropdown-item>
             </el-dropdown-menu>
           </template>
         </el-dropdown>
       </div>
     </el-col>
   </el-row>
+
+  <Dialog v-model:visible="dialogFormVisible" />
 </template>
 
 <script lang="ts" name="Header" setup>
-import {useRoute, useRouter} from "vue-router";
-import useSettingStore from '@/store/modules/Setting.ts'
-import useUserStore from '@/store/modules/User.ts'
-import {ArrowDown} from "@element-plus/icons-vue";
-import {REMOVE_TOKEN} from "@/utils/token.ts";
+import Dialog from './dialog/Index.vue'
+import { useRoute, useRouter } from "vue-router";
+import useSettingStore from '@/store/modules/Setting.ts';
+import { ArrowDown } from "@element-plus/icons-vue";
+import { GET_AVATAR, GET_USERNAME, REMOVE_TOKEN } from "@/utils/token.ts";
+import { onMounted, ref } from "vue";
 
-let $router = useRouter();
-let $route = useRoute();
-let SettingStore = useSettingStore();
-let userStore = useUserStore()
-let avatar = userStore.avatar || 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif'
+const $router = useRouter();
+const $route = useRoute();
+const SettingStore = useSettingStore();
 
+const avatar = ref('');
+const username = ref('');
+const dialogFormVisible = ref(false);
 
 const logout = () => {
-  REMOVE_TOKEN()
-  $router.push('/login')
-}
+  REMOVE_TOKEN();
+  $router.push('/login');
+};
 
+const handleCommand = (command: string) => {
+  if (command === 'changeAvatar') {
+    dialogFormVisible.value = true;
+  } else if (command === 'logout') {
+    logout();
+  }
+};
+
+onMounted(() => {
+  avatar.value = GET_AVATAR() ?? '';
+  username.value = GET_USERNAME() ?? '';
+});
 </script>
 
 <style lang="scss" scoped>

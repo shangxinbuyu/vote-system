@@ -3,8 +3,8 @@ export interface voteListInterface {
     title: string
     agree: number
     contra: number
+    type: number
     status: number
-    sponsor: boolean
 }
 
 export interface addVoteInterface {

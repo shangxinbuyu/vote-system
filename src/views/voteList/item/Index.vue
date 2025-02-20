@@ -15,7 +15,7 @@
         <span class="count">{{ item.agree }}票</span>
       </div>
       <el-progress
-          :color="item.status === -1 ? '#67c23a' : '#909399'"
+          :color="item.status === 0 ? '#67c23a' : '#909399'"
           :format="() => `${agree.toFixed(1)}%`"
           :percentage="agree"
           :stroke-width="20"
@@ -28,7 +28,7 @@
         <span class="count">{{ item.contra }}票</span>
       </div>
       <el-progress
-          :color="item.status === -1 ? '#f56c6c' : '#909399'"
+          :color="item.status === 0 ? '#f56c6c' : '#909399'"
           :format="() => `${contra.toFixed(1)}%`"
           :percentage="contra"
           :stroke-width="20"
@@ -39,7 +39,8 @@
 
     <div class="button-group">
       <el-button
-          :disabled="item.status !== -1" :icon="Select"
+          :disabled="item.status !== 0"
+          :icon="Select"
           class="vote-button"
           type="success"
           @click="choose(item,true)"
@@ -47,7 +48,7 @@
         赞成
       </el-button>
       <el-button
-          :disabled="item.status !== -1"
+          :disabled="item.status !== 0"
           :icon="CloseBold"
           class="vote-button"
           type="danger"
@@ -77,7 +78,7 @@ const background = computed(() => {
   switch (item.status) {
     case 1:
       return '#f0f9eb';
-    case 0:
+    case -1:
       return '#fef0f0';
     default:
       return '#ffffff';
@@ -87,7 +88,7 @@ const background = computed(() => {
 const choose = async (item: voteListInterface, flag: boolean) => {
   try {
     await reqVoteChoose(item.id, flag)
-    await list()
+
   } catch (e) {
     ElNotification({
       type: 'error',
